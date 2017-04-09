@@ -7,15 +7,15 @@
 #include <math.h>
 #include <pthread.h>
 
-struct list_node_s{
+struct list_node_s {
     int data;
     struct list_node_s *next;
 };
 
 struct list_node_s *head_pp = NULL;
 bool unique_array[65536] = {0};
-int * operation_array;
-float * time_array;
+int *operation_array;
+float *time_array;
 int elements;
 int count = 0;
 float overhead;
@@ -23,80 +23,80 @@ float overhead;
 long thread_count;
 pthread_mutex_t mutex;
 
-int member(int value){
+int member(int value) {
     struct list_node_s *curr_p = head_pp;
 
-    while (curr_p != NULL && curr_p->data < value){
+    while (curr_p != NULL && curr_p->data < value) {
         curr_p = curr_p->next;
     }
 
-    if (curr_p == NULL || curr_p->data > value){
+    if (curr_p == NULL || curr_p->data > value) {
         return 0;
-    }else{
+    } else {
         return 1;
     }
 }
 
-int insert(int value){
-    struct list_node_s* curr_p = head_pp;          
-    struct list_node_s* pred_p = NULL;
-    struct list_node_s* temp_p = NULL;
- 
-    while(curr_p !=NULL && curr_p->data < value){
+int insert(int value) {
+    struct list_node_s *curr_p = head_pp;
+    struct list_node_s *pred_p = NULL;
+    struct list_node_s *temp_p = NULL;
+
+    while (curr_p != NULL && curr_p->data < value) {
         pred_p = curr_p;
         curr_p = curr_p->next;
     }
-     
-    if(curr_p == NULL || curr_p->data > value){
-        temp_p = malloc(sizeof(struct list_node_s));        
+
+    if (curr_p == NULL || curr_p->data > value) {
+        temp_p = malloc(sizeof(struct list_node_s));
         temp_p->data = value;
         temp_p->next = curr_p;
-         
-        if(pred_p == NULL){
+
+        if (pred_p == NULL) {
             head_pp = temp_p;
-        }else{
+        } else {
             pred_p->next = temp_p;
         }
         return 1;
-    }else{
+    } else {
         return 0;
     }
 }
 
-int delete (int value){
-    struct list_node_s* curr_p = head_pp;
-    struct list_node_s* pred_p = NULL;
-     
-    while(curr_p != NULL && curr_p->data < value){
+int delete(int value) {
+    struct list_node_s *curr_p = head_pp;
+    struct list_node_s *pred_p = NULL;
+
+    while (curr_p != NULL && curr_p->data < value) {
         pred_p = curr_p;
         curr_p = curr_p->next;
-    }   
-     
-    if(curr_p != NULL && curr_p -> data < value){
-        if(pred_p == NULL){
+    }
+
+    if (curr_p != NULL && curr_p->data < value) {
+        if (pred_p == NULL) {
             head_pp = curr_p->next;
             free(curr_p);
-        }else{
+        } else {
             pred_p->next = curr_p->next;
             free(curr_p);
         }
         unique_array[value] = false;
         return 1;
-    }else{
+    } else {
         return 0;
-    } 
+    }
 }
 
-void populateLinkedList(int size){
+void populateLinkedList(int size) {
     srand(time(NULL));
     int *rand_array = malloc(size * sizeof(int));
     int i;
-    for (i = 0; i < size; i++){
+    for (i = 0; i < size; i++) {
         int value = rand() % 65536;
-        if (!unique_array[value]){
+        if (!unique_array[value]) {
             insert(value);
             unique_array[value] = true;
-        }else{
+        } else {
             i = i - 1;
         }
     }
@@ -108,156 +108,156 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
-void shuffleArray(int * array, int size) {
+void shuffleArray(int *array, int size) {
     srand(time(NULL));
     int i;
-    for(i = size-1; i > 0; i--) {
-        int j = rand() % (i+1);
+    for (i = size - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
         swap(&array[i], &array[j]);
     }
 }
 
-int getUniqueRandomNumber(){
+int getUniqueRandomNumber() {
     int random = rand() % 65536;
-    
-    while(unique_array[random]){
+
+    while (unique_array[random]) {
         random = rand() % 65536;
     }
     return random;
 }
 
-int * operationProceduence(int m, float mem, float ins, float del){
+int *operationProceduence(int m, float mem, float ins, float del) {
     float tot_mem = m * mem;
     float tot_ins = tot_mem + m * ins;
     float tot_del = tot_ins + m * del;
 
     operation_array = malloc(m * sizeof(int));
     int j;
-    for(j=0; j<m; j++){
-        if(j < tot_mem){
+    for (j = 0; j < m; j++) {
+        if (j < tot_mem) {
             operation_array[j] = 1;
-        }else if(j < tot_ins){
+        } else if (j < tot_ins) {
             operation_array[j] = 2;
-        }else if(j < tot_del){
+        } else if (j < tot_del) {
             operation_array[j] = 3;
         }
     }
-    shuffleArray(operation_array,m);
-    
+    shuffleArray(operation_array, m);
+
     return operation_array;
 }
 
-int printList(){
-    struct list_node_s* curr_p = head_pp;
+int printList() {
+    struct list_node_s *curr_p = head_pp;
     int count = 0;
-    while(curr_p != NULL){
+    while (curr_p != NULL) {
         curr_p = curr_p->next;
-        count ++;
+        count++;
     }
     return count;
 }
 
-float calculateSD(float data[],int size){
+float calculateSD(float data[], int size) {
     float sum = 0.0, mean, standardDeviation = 0.0;
     int i;
-    for(i=0; i<size; ++i){
+    for (i = 0; i < size; ++i) {
         sum += data[i];
     }
-    mean = sum/size;
-    for(i=0; i<size; ++i){
+    mean = sum / size;
+    for (i = 0; i < size; ++i) {
         standardDeviation += pow(data[i] - mean, 2);
     }
-    return sqrt(standardDeviation/size);
+    return sqrt(standardDeviation / size);
 }
 
-float calculateMean(float data[],int size){
+float calculateMean(float data[], int size) {
     float sum = 0.0, mean = 0.0;
     int i;
-    for(i=0; i<size; ++i){
+    for (i = 0; i < size; ++i) {
         sum += data[i];
     }
-    return sum/size;
+    return sum / size;
 }
 
-void * thread_oparation(void * rank){
-    
-    int thread_number = (long)rank;
-    int instances = elements/thread_count;
+void *thread_oparation(void *rank) {
+
+    int thread_number = (long) rank;
+    int instances = elements / thread_count;
     int val1, val2, val3;
-    int start=thread_number, j;
-    for(j = start; j < elements; j=j+thread_count){ 
+    int start = thread_number, j;
+    for (j = start; j < elements; j = j + thread_count) {
         count++;
-        if(operation_array[j]==1){
+        if (operation_array[j] == 1) {
             pthread_mutex_lock(&mutex);
-            val1 = rand() % 65536; 
+            val1 = rand() % 65536;
             member(val1);
             pthread_mutex_unlock(&mutex);
-        }else if(operation_array[j] == 2){
+        } else if (operation_array[j] == 2) {
             pthread_mutex_lock(&mutex);
             val2 = getUniqueRandomNumber();
             insert(val2);
             //printf("%f %d\n",time_spent,j);
             pthread_mutex_unlock(&mutex);
-        }else if(operation_array[j] == 3){
+        } else if (operation_array[j] == 3) {
             pthread_mutex_lock(&mutex);
             val3 = rand() % 65536;
             delete(val3);
-    
+
             pthread_mutex_unlock(&mutex);
         }
-        
+
         //printf("%f\n",time_spent);   
     }
     return NULL;
 }
 
-int main(int argc, char **argv){
-    int i,size = 100;
-    time_array = malloc( size * sizeof(int));
+int main(int argc, char **argv) {
+    int i, size = 100;
+    time_array = malloc(size * sizeof(int));
     elements = atoi(argv[2]);
-    
-    thread_count = atoi(argv[6]);
-    long thread; 
-    pthread_t* thread_handles;
 
-    thread_handles = (pthread_t*) malloc (thread_count*sizeof(pthread_t));
-    
-    for(i = 0; i< size ; i++){
+    thread_count = atoi(argv[6]);
+    long thread;
+    pthread_t *thread_handles;
+
+    thread_handles = (pthread_t *) malloc(thread_count * sizeof(pthread_t));
+
+    for (i = 0; i < size; i++) {
         overhead = 0;
-        populateLinkedList(atoi(argv[1]));    
-        operationProceduence(atoi(argv[2]),atof(argv[3]),atof(argv[4]),atof(argv[5]));
+        populateLinkedList(atoi(argv[1]));
+        operationProceduence(atoi(argv[2]), atof(argv[3]), atof(argv[4]), atof(argv[5]));
 
         pthread_mutex_init(&mutex, NULL);
 
         clock_t begin = clock();
-        for (thread = 0; thread < thread_count; thread++){
-            pthread_create(&thread_handles[thread], NULL,thread_oparation,(void*)thread);  
+        for (thread = 0; thread < thread_count; thread++) {
+            pthread_create(&thread_handles[thread], NULL, thread_oparation, (void *) thread);
         }
 
-        for (thread = 0; thread < thread_count; thread++){
-            pthread_join(thread_handles[thread], NULL); 
+        for (thread = 0; thread < thread_count; thread++) {
+            pthread_join(thread_handles[thread], NULL);
         }
         clock_t end = clock();
         pthread_mutex_destroy(&mutex);
-        
-        double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+        double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
         time_array[i] = time_spent - overhead;
-        printf("%d\n",i);
+        printf("%d\n", i);
         //printf("count = %d \n",count);
-        printf("count = %d \n",printList());
+        printf("count = %d \n", printList());
         head_pp = NULL;
         int l;
-        for (l = 0; l < 65536; ++l){
+        for (l = 0; l < 65536; ++l) {
             unique_array[l] = 0;
         }
         //printf("%f\t",time_spent);
         //printf("itmes = %f \n", overhead);
     }
-    
+
     //printf("size = %f \t",sizeof(time_array));
-    printf("sd = %f \t",calculateSD(time_array,size));
-    printf("mean = %f \n",calculateMean(time_array,size));
-    
-    
+    printf("sd = %f \t", calculateSD(time_array, size));
+    printf("mean = %f \n", calculateMean(time_array, size));
+
+
     return 0;
 }
