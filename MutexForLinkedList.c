@@ -7,6 +7,8 @@
 #include <math.h>
 #include <pthread.h>
 
+
+//node structure definition
 struct list_node_s {
     int data;
     struct list_node_s *next;
@@ -250,13 +252,11 @@ int main(int argc, char **argv) {
         for (l = 0; l < 65536; ++l) {
             unique_array[l] = 0;
         }
-        //printf("%f\t",time_spent);
-        //printf("itmes = %f \n", overhead);
+
     }
 
-    //printf("size = %f \t",sizeof(time_array));
-    printf("sd = %f \t", calculateSD(time_array, size));
-    printf("mean = %f \n", calculateMean(time_array, size));
+    printf("STD = %f \t", calculateSD(time_array, size));
+    printf("AVERAGE = %f \n", calculateMean(time_array, size));
 
 
     return 0;

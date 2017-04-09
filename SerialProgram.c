@@ -4,15 +4,18 @@
 #include <time.h>
 #include "timer.h"
 
+//values for error codes
 #define ERR_NO_NUM -1
 #define ERR_NO_MEM -2
 
-
+//node struct definition
 typedef struct node {
     int value;
     struct node *next;
 } node_t;
 
+
+//create new linkedList with one element(head) with null value
 node_t *createNewLinkedList(int value) {
     node_t *head = NULL;
     head = malloc(sizeof(node_t));
@@ -21,7 +24,7 @@ node_t *createNewLinkedList(int value) {
     return head;
 }
 
-
+//insert node function
 void insert(node_t *head, int value) {
     node_t *current = head;
     while (current->next != NULL) {
@@ -33,6 +36,8 @@ void insert(node_t *head, int value) {
     newNode->next = NULL;
 }
 
+
+//linkedlist printing function
 void printLinkedList(node_t *head) {
     node_t *current = head;
     while (current->next != NULL) {
@@ -43,6 +48,8 @@ void printLinkedList(node_t *head) {
 
 }
 
+
+//checking for membership
 bool member(int value, node_t *head) {
     node_t *current = head;
     while (current->value != value && current->next != NULL) {
@@ -54,6 +61,8 @@ bool member(int value, node_t *head) {
     return false;
 }
 
+
+//to delete a member, will return 1 if value can be found or 0 else
 bool delete(int value, node_t *head) {
     if (head->value == value) {
         if (head->next == NULL) {
@@ -83,6 +92,8 @@ bool delete(int value, node_t *head) {
 
 }
 
+
+//generate random linkedlist
 
 node_t *createRandomLinkedList(int n) {
     int i;

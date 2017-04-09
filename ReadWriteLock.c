@@ -29,6 +29,8 @@ float overhead;
 long thread_count;
 pthread_mutex_t mutex;
 
+
+//checking for membership
 int member(int value) {
     struct list_node_s *curr_p = head_pp;
 
@@ -43,6 +45,8 @@ int member(int value) {
     }
 }
 
+
+//inserting values to the linkedlist
 int insert(int value) {
     struct list_node_s *curr_p = head_pp;
     struct list_node_s *pred_p = NULL;
@@ -68,7 +72,7 @@ int insert(int value) {
         return 0;
     }
 }
-
+//delete value if present
 int delete(int value) {
     struct list_node_s *curr_p = head_pp;
     struct list_node_s *pred_p = NULL;
@@ -114,6 +118,8 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
+
+//algorithm for shuffling integer array
 void shuffleArray(int *array, int size) {
     srand(time(NULL));
     int i;
@@ -132,6 +138,8 @@ int getUniqueRandomNumber() {
     return random;
 }
 
+
+//generating operations
 int *operationProceduence(int m, float mem, float ins, float del) {
     float tot_mem = m * mem;
     float tot_ins = tot_mem + m * ins;
@@ -186,6 +194,8 @@ float calculateMean(float data[], int size) {
     return sum / size;
 }
 
+
+//method that execute parallel
 void *thread_oparation(void *rank) {
 
     int thread_number = (long) rank;
@@ -258,8 +268,8 @@ int main(int argc, char **argv) {
     }
 
 
-    printf("sd = %f \t", calculateSD(time_array, size));
-    printf("mean = %f \n", calculateMean(time_array, size));
+    printf("STD = %f \t", calculateSD(time_array, size));
+    printf("AVG = %f \n", calculateMean(time_array, size));
 
 
     return 0;
