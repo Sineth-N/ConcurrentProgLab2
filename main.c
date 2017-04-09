@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <stdbool.h>
 #include <time.h>
+#include "timer.h"
 
 #define ERR_NO_NUM -1
 #define ERR_NO_MEM -2
@@ -35,7 +36,7 @@ void insert(node_t *head, int value) {
 void printLinkedList(node_t *head) {
     node_t *current = head;
     while (current->next != NULL) {
-        printf("%d \n", current->value);
+        printf("%d ->", current->value);
         current = current->next;
     }
     printf("%d \n", current->value);
@@ -84,29 +85,36 @@ bool delete(int value, node_t *head) {
 
 
 node_t *createRandomLinkedList(int n) {
-
-
     int i;
     time_t t;
     int randomNumbers[n];
-
-    /* Intializes random number generator */
+    /* Initialises random number generator */
     srand((unsigned) time(&t));
     /* Print 5 random numbers from 0 to 49 */
     for (i = 0; i < n; i++) {
         randomNumbers[i] = rand() % 65535;
     }
     node_t *head = createNewLinkedList(randomNumbers[0]);
-    for (int i = 1; i < 100; i++) {
-        insert(head, randomNumbers[i]);
+    for (int index = 1; index < n; index++) {
+        insert(head, randomNumbers[index]);
     }
     return head;
 }
 
 
 int main() {
+    double start, finish, elapsed;
+    time_t t;
+
+    srand((unsigned) time(&t));
     node_t *head = createRandomLinkedList(1000);
-    printLinkedList(head);
+    GET_TIME(start);
+    for (int i = 0; i < 9900; ++i) {
+        member(rand() % 65535, head);
+    }
+    GET_TIME(finish);
+    elapsed = finish - start;
+    printf("The elapsed time is %e seconds\n", elapsed);
     return 0;
 }
 
