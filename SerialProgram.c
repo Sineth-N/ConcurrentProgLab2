@@ -115,17 +115,31 @@ node_t *createRandomLinkedList(int n) {
 
 int main() {
     double start, finish, elapsed;
-    time_t t;
+    double total_time;
+    int size = 100;
+    for (int i=0 ; i<size;i++){
+        time_t t;
 
-    srand((unsigned) time(&t));
-    node_t *head = createRandomLinkedList(1000);
-    GET_TIME(start);
-    for (int i = 0; i < 9900; ++i) {
-        member(rand() % 65535, head);
+
+        srand((unsigned) time(&t));
+        node_t *head = createRandomLinkedList(1000);
+
+
+
+        GET_TIME(start);
+        for (int i = 0; i < 9900; ++i) {
+            member(rand() % 65535, head);
+        }
+        GET_TIME(finish);
+        elapsed = finish - start;
+        printf("The elapsed time is %e seconds\n", elapsed);
+        total_time+=elapsed;
+
     }
-    GET_TIME(finish);
-    elapsed = finish - start;
-    printf("The elapsed time is %e seconds\n", elapsed);
+
+    printf("avarage time : %e", total_time/size);
+
+
     return 0;
 }
 
